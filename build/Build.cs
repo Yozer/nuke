@@ -41,7 +41,7 @@ using static Nuke.Common.Tools.Slack.SlackTasks;
 [CheckBuildProjectConfigurations]
 [DotNetVerbosityMapping]
 [UnsetVisualStudioEnvironmentVariables]
-[ShutdownDotNetBuildServerOnFinish]
+[ShutdownDotNetAfterServerBuild]
 [TeamCitySetDotCoverHomePath]
 [TeamCity(
     TeamCityAgentPlatform.Windows,
@@ -83,6 +83,15 @@ partial class Build : NukeBuild
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
     public static int Main() => Execute<Build>(x => x.Pack);
+
+    Target Foo => _ => _
+        .Executes(() =>
+        {
+            Console.WriteLine(Configuration);
+            Console.WriteLine(MyPath);
+        });
+
+    [Parameter] readonly AbsolutePath MyPath;
 
     [CI] readonly TeamCity TeamCity;
     [CI] readonly AzurePipelines AzurePipelines;
